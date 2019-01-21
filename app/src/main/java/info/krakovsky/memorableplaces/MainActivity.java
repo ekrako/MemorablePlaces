@@ -21,22 +21,41 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ListView myListView = findViewById(R.id.plcaeListView);
-        final ArrayList<String> myPlacesNames = new ArrayList(asList("Mall Beer Yaakov","Tse'elon School"));
-        final ArrayList<Double> myPlacesLat = new ArrayList(asList(31.9418461,31.9434914));
-        final ArrayList<Double> myPlacesLon = new ArrayList(asList(34.8359396,34.8372788));
+        Locations locations = Locations.getInstance();
+        ArrayList<String> placesNames = locations.getPlacesNames();
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,myPlacesNames);
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,placesNames);
         myListView.setAdapter(arrayAdapter);
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                intent.putExtra("name",myPlacesNames.get(position));
-                intent.putExtra("lat",myPlacesLat.get(position));
-                intent.putExtra("lon",myPlacesLon.get(position));
+                intent.putExtra("index",position);
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ListView myListView = findViewById(R.id.plcaeListView);
+        Locations locations = Locations.getInstance();
+        ArrayList<String> placesNames = locations.getPlacesNames();
+
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,placesNames);
+        myListView.setAdapter(arrayAdapter);
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("index",position);
+                startActivity(intent);
+            }
+        });
+
     }
 
     public void goToMap(View view) {
